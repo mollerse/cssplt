@@ -1,0 +1,278 @@
+<style>
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .light {
+    background: #e4ebee;
+    color: #1c202b;
+  }
+
+  .emphasis {
+    background: #fb544d;
+    color: #fff;
+  }
+
+  .emphasis h1,
+  .emphasis h2,
+  .emphasis h3,
+  .emphasis h4 {
+    color: #1c202b;
+  }
+
+  .light h1,
+  .light h2,
+  .light h3,
+  .light h4 {
+    color: #1c202b;
+  }
+
+  .dark {
+    background: #1c202b;
+  }
+
+  .reveal .subtitle {
+    font-family: 'Jaapokki-regular', sans-serif;
+  }
+
+  .slides>section {
+    padding: 1% !important;
+  }
+
+  .midten {
+    height: 100%;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .midten > * {
+    text-align: center !important;
+  }
+
+  h1, h2, h3, h4 {
+    text-align: left;
+  }
+
+  .reveal p {
+    font-size: 150%;
+    text-align: left;
+  }
+  span.uthev {
+    color: #fb544d;
+  }
+
+  img {
+    border: none !important;
+    background: inherit !important;
+    box-shadow: none !important;
+  }
+
+  .strike.visible:not(.current-fragment) {
+    text-decoration: line-through;
+  }
+
+</style>
+
+<section class="midten">
+  <h2>CSS</h2>
+  <h3>&mdash;</h3>
+  <h2>Et programmerings-teoretisk skråblikk</h2>
+  <h7>Stian Veum Møllersen / @mollerse</h7>
+  <h7>BEKK</h7>
+</section>
+
+<section class="midten">
+  <h2>KOMPOSISJON</h2>
+  <aside class="notes">
+    <p>Jeg tenkte vi skulle se på komposisjon. Komposisjon er, sammen med forståelse,
+en sentralt komponent i det å programmere systemer. Komposisjon er den mekaniske
+delen av programmeringen, det å sette sammen abstrakte enheter til en mer
+kompleks abstrakt enhet. På den andre siden så er forståelse den biten som
+handler om å finne mening eller definere semantikken bak de abstrakte enhetene.</p>
+  </aside>
+</section>
+
+<section class="midten light" data-background="#e4ebee">
+  <p>Komposisjon er å sette sammen <span class="uthev">løsninger</span> på enklere <span class="uthev">delproblemer</span> for å løse et mer komplekst <span class="uthev">problem</span>.</p>
+  <aside class="notes">
+    <p>For å konkretisere det litt før vi går videre så kan vi si at komposisjon er det å
+sette sammen løsninger på enklere delproblemer for å løse et mer komplekst
+problem. Innen programmering er komposisjon noe ganske velkjent...</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Komposisjon</h2>
+  <p>De fleste kjenner komposisjon fra objekt orientering:</p>
+  <pre ><code class="java">class Animal {
+  //...
+}
+
+class Dog extends Animal {
+  //...
+}
+
+class Owner {
+  private Dog bjarne = new Dog();
+  //...
+}</code></pre>
+</section>
+
+<section>
+  <h2>Komposisjon</h2>
+  <p>...eller fra funksjonell programmering</p>
+  <pre ><code class="javascript">function compose(f, g) {
+  return function(x) {
+    f(g(x));
+  }
+}
+
+function mapWith(a, f) {
+  return a.map(el => f(el));
+}</code></pre>
+</section>
+
+<section class="midten emphasis" data-background="#fb544d">
+  <h3>For at komposisjon skal fungere må effekten av komposisjonen være lokalisert og forutsigbar.</h3>
+  <aside class="notes">
+    <p>Det som er viktig med komposisjon er at det ikke kommer i veien for forståelse.
+Derfor er det en viktig egenskap ved komposisjonsmekanismer at effekten av
+komposisjonen er lokalisert og at resultatet er forutsigbart. Hvis komposisjonen
+av to enheter fører til at enhetene selv endrer funksjonalitet vil det gjøre det
+veldig mye vanskeligere å forstå helheten. La oss ta en titt på hvordan dette
+fungerer i CSS.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Komposisjon i CSS</h2>
+CSS:
+    <pre><code>.btn {
+  color: red;
+  background: silver;
+  display: inline-block;
+}
+
+.sidebar .btn {
+  color: black;
+  background: red;
+}</code></pre>
+HTML:
+  <pre><code><div class="sidebar">
+  <button class="btn">Press</button>
+</div>
+<!-- color: black; background: red; display: inline-block; --></code></pre>
+<aside class="notes">
+  <p>Her har vi laget oss en generell stil for alle elementer med klassen .btn. Så
+lager vi oss en spesialisering av .btn som gjelder for .btns i sidebar.
+Resultatet er en button som har rød bakgrunn og svart tekst. Det er slik mye CSS
+skrives i dag. Vi arver noen av stilene og så overskriver vi noen attributter
+for å spesialisere dem.</p>
+</aside>
+</section>
+
+<section class="midten light" data-background="#1c202b">
+  <h3>CSS har <span class="uthev">ikke</span> de egenskapene som gjør at komposisjon <span class="uthev">fungerer</span>.</h3>
+  <aside class="notes">
+    <p>Noen har kanskje lagt merke til noen problemer allerede. CSS mangler de
+egenskapene som gjør at komposisjon fungerer. Vi tar et eksempel til for å
+illustrere.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Ett eksempel</h2>
+CSS:
+  <pre><code>.sidebar .header {
+  font-weight: 700;
+  text-decoration: underline;
+}
+.news-item h2 {
+  color: blue;
+}</code></pre>
+HTML:
+  <pre><code><div class="sidebar">
+  <h1 class="header">Sidebar</h1>
+  <div class="news-item">
+    <h2 class="header">News</h2>
+    <p>There were news.</p>
+  </div>
+</div>
+<!-- font-weight: 700; text-decoration: underline; color: blue; --></code></pre>
+<aside class="notes">
+  <p>Dette er ikke et helt uvanlig problem i CSS. Et sub-tre gir match på to ulike
+regler og vi får en uønsket effekt ved at stilene fra begge regler blir satt på
+header elementet i sidebar. Hvis vi tenker oss at de to reglene befinner seg i
+helt ulike ender av stilarket som blir brukt så kan man fort forestille seg at
+det er en umulig oppgave å forutse effekten på header-elementet.</p>
+</aside>
+</section>
+
+<section>
+  <h2>Komposisjon i CSS</h2>
+  <p>Effekten av en CSS-regel er potensielt avhengig av alle andre CSS-regler i stilarket.</p>
+  <aside class="notes">
+    <p>Problemet med CSS er at effekten av en CSS-regel vil kunne påvirkes av all annen
+aktiv CSS. Vi har ingen måte å forutse effekten av en CSS-regel på et
+html-element uten å kjenne til all annen CSS som også påvirker elementet.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>To valg</h2>
+  <p class="fragment">1) Skriv om den uønskede regelen til å matche smalere.</p>
+  <br>
+  <p class="fragment">2) Overskrive uønskede attributter og øke spesifisitet.</p>
+  <aside class="notes">
+    <p>Det er vanligvis to ulike måter å motvirke denne typen problemer.Den første
+løsningen går ut på å skrive om den første regelen til å matche smalere. Dette
+kan potensielt føre til ringvirkninger i markup hvor man fort må gå over og
+legge til klasser på alle h2-elementer. Den andre løsningen går ut på å
+overskrive de uønskede attributtene med resets eller andre verdier, for å til
+det må spesififiseteten til regelen økes.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Gjenbruk</h2>
+  <p class="fragment">Ønsket om å kunne gjenbruke regler i så stor grad som mulig forsterker problemene.</p>
+  <aside class="notes">
+    <p>La oss prate om gjenbruk. Når vi skriver CSS regler forsøker vi ofte å lage
+regler som er generelle, slik at vi kan gjenbruke dem i flere situasjoner. Dette
+får oss til å lage regler som matcher veldig bredt og på den måten bidrar til å
+forsterke den typen problemer vi har sett med komposisjon i CSS. Og her er
+kjernen til mye av problemene med vedlikeholdbar CSS.</p>
+  </aside>
+</section>
+
+<section class="midten emphasis" data-background="#fb544d">
+  <h2>Måten vi ønsker å gjenbruke CSS på overser de iboende svakhetene i CSS' komposisjonsmekanisme.</h2>
+  <aside class="notes">
+    <p>Måten vi ønsker å gjenbruke CSS overser helt de svakhetene som er iboende i
+måten CSS komponerer på. Bred gjenbruk basert på overfladisk likhet fungerer ikke.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Løsning?</h2>
+  <p class="fragment">Begrense ansvaret til CSS-regler ved å snevre inn påvirkningen til så få elementer som mulig.</p>
+  <br>
+  <p class="fragment">Begrense gjenbruk av stiler til ting som er faktisk like, og ikke bare overfladisk like.</p>
+  <aside class="notes">
+    <p>Finnes det løsninger? Kanskje ikke perfekte, men iallefall et par grep som vil
+minske effekten av de iboende svakhetene til CSS. Vi kan begrense ansvaret til
+CSS-regler. Isteden for å starte med noe generelt lager vi heller regler som er
+veldig spissa, så kan vi heller skille ut ting i mer generelle regler etterhvert
+som behovene viser seg. For å sørge for at behovene som melder seg er faktiske
+behov for generalisering så begrenser vi gjenbruk av stiler til ting som er
+faktisk like og ikke bare overfladisk like.</p>
+  </aside>
+</section>
+
+<section class="midten">
+  <h1>TAKK FOR MEG</h1>
+  <p>Stian Veum Møllersen / @mollerse</p>
+  <p>BEKK</p>
+</section>
