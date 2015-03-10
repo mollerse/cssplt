@@ -85,10 +85,22 @@
 
 <section class="midten">
   <h2>KOMPOSISJON</h2>
+  <aside class="notes">
+    <p>Jeg tenkte vi skulle se på komposisjon. Komposisjon er, sammen med forståelse,
+en sentralt komponent i det å programmere systemer. Komposisjon er den mekaniske
+delen av programmeringen, det å sette sammen abstrakte enheter til en mer
+kompleks abstrakt enhet. På den andre siden så er forståelse den biten som
+handler om å finne mening eller definere semantikken bak de abstrakte enhetene.</p>
+  </aside>
 </section>
 
 <section class="midten light" data-background="#e4ebee">
   <p>Komposisjon er å sette sammen <span class="uthev">løsninger</span> på enklere <span class="uthev">delproblemer</span> for å løse et mer komplekst <span class="uthev">problem</span>.</p>
+  <aside class="notes">
+    <p>For å konkretisere det litt før vi går videre så kan vi si at komposisjon er det å
+sette sammen løsninger på enklere delproblemer for å løse et mer komplekst
+problem. Innen programmering er komposisjon noe ganske velkjent...</p>
+  </aside>
 </section>
 
 <section>
@@ -125,10 +137,12 @@ function mapWith(a, f) {
 <section class="midten emphasis" data-background="#fb544d">
   <h3>For at komposisjon skal fungere må effekten av komposisjonen være lokalisert og forutsigbar.</h3>
   <aside class="notes">
-    <p>Feks i objekt orientering så bryter komposisjon sammen hvis du kan endre
-foreldre-objektet fra barne-objektet. Eller i funksjonell programmering vil
-komposisjon bryte sammen hvis funksjoner kan endre oppførsel etter at de har
-blitt deklarert.</p>
+    <p>Det som er viktig med komposisjon er at det ikke kommer i veien for forståelse.
+Derfor er det en viktig egenskap ved komposisjonsmekanismer at effekten av
+komposisjonen er lokalisert og at resultatet er forutsigbart. Hvis komposisjonen
+av to enheter fører til at enhetene selv endrer funksjonalitet vil det gjøre det
+veldig mye vanskeligere å forstå helheten. La oss ta en titt på hvordan dette
+fungerer i CSS.</p>
   </aside>
 </section>
 
@@ -161,15 +175,10 @@ for å spesialisere dem.</p>
 
 <section class="midten light" data-background="#1c202b">
   <h3>CSS har <span class="uthev">ikke</span> de egenskapene som gjør at komposisjon <span class="uthev">fungerer</span>.</h3>
-</section>
-
-<section>
-  <h2>Komposisjon i CSS</h2>
-  <p>Effekten av en bit med CSS er potensielt avhengig av all annen CSS på siden.</p>
   <aside class="notes">
-    <p>En bit med CSS kan potensielt påvirkes av en vilkårlig og tilsynelatende
-ikke-relatert bit med CSS. Det som har noe å si for det endelige resultatet av
-CSS på et HTML-element er avhengig av hvilke regler som matcher elementet.</p>
+    <p>Noen har kanskje lagt merke til noen problemer allerede. CSS mangler de
+egenskapene som gjør at komposisjon fungerer. Vi tar et eksempel til for å
+illustrere.</p>
   </aside>
 </section>
 
@@ -194,47 +203,71 @@ HTML:
 <!-- font-weight: 700; text-decoration: underline; color: blue; --></code></pre>
 <aside class="notes">
   <p>Dette er ikke et helt uvanlig problem i CSS. Et sub-tre gir match på to ulike
-regler og vi får en uønsket sammenslåings effekt. Hvordan skal vi løse dette?</p>
+regler og vi får en uønsket effekt ved at stilene fra begge regler blir satt på
+header elementet i sidebar. Hvis vi tenker oss at de to reglene befinner seg i
+helt ulike ender av stilarket som blir brukt så kan man fort forestille seg at
+det er en umulig oppgave å forutse effekten på header-elementet.</p>
 </aside>
 </section>
 
 <section>
-  <h2>To løsninger</h2>
+  <h2>Komposisjon i CSS</h2>
+  <p>Effekten av en CSS-regel er potensielt avhengig av alle andre CSS-regler i stilarket.</p>
+  <aside class="notes">
+    <p>Problemet med CSS er at effekten av en CSS-regel vil kunne påvirkes av all annen
+aktiv CSS. Vi har ingen måte å forutse effekten av en CSS-regel på et
+html-element uten å kjenne til all annen CSS som også påvirker elementet.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>To valg</h2>
   <p class="fragment">1) Skriv om den uønskede regelen til å matche smalere.</p>
   <br>
   <p class="fragment">2) Overskrive uønskede attributter og øke spesifisitet.</p>
-  <br>
-  <p class="fragment"><span class="uthev">Ingen</span> av løsningene er optimale</p>
   <aside class="notes">
-    <p>Den første løsningen går ut på å skrive om den første regelen til å matche
-smalere. Dette kan potensielt føre til ringvirkninger i markup hvor man fort må
-gå over og legge til klasser på alle h2-elementer. Den andre løsningen går ut på å
+    <p>Det er vanligvis to ulike måter å motvirke denne typen problemer.Den første
+løsningen går ut på å skrive om den første regelen til å matche smalere. Dette
+kan potensielt føre til ringvirkninger i markup hvor man fort må gå over og
+legge til klasser på alle h2-elementer. Den andre løsningen går ut på å
 overskrive de uønskede attributtene med resets eller andre verdier, for å til
 det må spesififiseteten til regelen økes.</p>
   </aside>
 </section>
 
-<section class="midten emphasis" data-background="#fb544d">
-  <h2>Måten vi gjenbruker CSS overser de iboende svakhetene i CSS' komposisjonsmekanisme.</h2>
+<section>
+  <h2>Gjenbruk</h2>
+  <p class="fragment">Ønsket om å kunne gjenbruke regler i så stor grad som mulig forsterker problemene.</p>
   <aside class="notes">
-    <p>Måten vi gjenbruker CSS overser helt de svakhetene som er iboende i måten CSS
-komponerer på. Vi lager oss abstraksjoner som vi gjenbruker basert på hvordan
-ting ser ut, det fungerer ikke. </p>
+    <p>La oss prate om gjenbruk. Når vi skriver CSS regler forsøker vi ofte å lage
+regler som er generelle, slik at vi kan gjenbruke dem i flere situasjoner. Dette
+får oss til å lage regler som matcher veldig bredt og på den måten bidrar til å
+forsterke den typen problemer vi har sett med komposisjon i CSS. Og her er
+kjernen til mye av problemene med vedlikeholdbar CSS.</p>
+  </aside>
+</section>
+
+<section class="midten emphasis" data-background="#fb544d">
+  <h2>Måten vi ønsker å gjenbruke CSS på overser de iboende svakhetene i CSS' komposisjonsmekanisme.</h2>
+  <aside class="notes">
+    <p>Måten vi ønsker å gjenbruke CSS overser helt de svakhetene som er iboende i
+måten CSS komponerer på. Bred gjenbruk basert på overfladisk likhet fungerer ikke.</p>
   </aside>
 </section>
 
 <section>
   <h2>Løsning?</h2>
-  <p class="fragment">Begrense ansvaret til CSS-regler ved å abstrahere på faktisk likhet, og ikke bare overfladisk likhet.</p>
+  <p class="fragment">Begrense ansvaret til CSS-regler ved å snevre inn påvirkningen til så få elementer som mulig.</p>
   <br>
-  <p class="fragment">Det er OK å skrive den samme koden to ganger for ulike grunner.</p>
+  <p class="fragment">Begrense gjenbruk av stiler til ting som er faktisk like, og ikke bare overfladisk like.</p>
   <aside class="notes">
-    <p>Hva kan vi gjøre med måten vi skriver CSS på for å unngå dette? Vi kan ikke
-komponere CSS utifra overfladisk liket -- hvordan ting ser ut. Å gjenbruke CSS
-basert på at to ting ser like ut er en snarvei til uhåndterbar CSS. Hvis vi
-isteden konsentrerer oss om å gjenbruke ting der to ting faktisk er samme tingen
-og på den måten reduserer hvor mange ulike elementer hver regel påvirker.</p>
-    <p>Det er faktisk ikke noe problem å skrive den samme koden to ganger, hvis det er for to ulike grunner.</p>
+    <p>Finnes det løsninger? Kanskje ikke perfekte, men iallefall et par grep som vil
+minske effekten av de iboende svakhetene til CSS. Vi kan begrense ansvaret til
+CSS-regler. Isteden for å starte med noe generelt lager vi heller regler som er
+veldig spissa, så kan vi heller skille ut ting i mer generelle regler etterhvert
+som behovene viser seg. For å sørge for at behovene som melder seg er faktiske
+behov for generalisering så begrenser vi gjenbruk av stiler til ting som er
+faktisk like og ikke bare overfladisk like.</p>
   </aside>
 </section>
 
